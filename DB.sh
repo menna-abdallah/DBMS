@@ -22,10 +22,11 @@ select choice in "Creat New DataBase" "List Your DataBase" "Drop Your DataBase" 
 do
 	case $choice in
   	"Creat New DataBase")
-  # ./create_db.sh
+	
+		source ../creat_DB.sh
   	;;
 	"List Your DataBase")
-  	ls `pwd`
+		ls $(pwd)
   	;;
 
 	"Drop Your DataBase")
