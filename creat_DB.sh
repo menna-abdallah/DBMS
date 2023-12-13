@@ -26,6 +26,9 @@ then
 	 echo " DataBase Name is unvalid with spaces"
 	 DBNAME=${DBNAME// /_}
 	 echo "your DataBase name is $DBNAME"
+	 mkdir $(pwd)/$DBNAME
+         echo " $DBNAME DataBase created successfully"
+         break
 
  else
 	 echo "Valid Name"

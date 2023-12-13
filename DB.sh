@@ -14,8 +14,6 @@ else
 	cd "$path/MyDBMS"
 fi
 
-echo  `pwd`
-
 # start select
 
 select choice in "Creat New DataBase" "List Your DataBase" "Drop Your DataBase" "Connect A DataBAse" "Exit"
@@ -30,6 +28,7 @@ do
   	;;
 
 	"Drop Your DataBase")
+		source ../drop_DB.sh $@
  	 ;;
 
  	 "Connect A DataBAse")
