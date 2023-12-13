@@ -7,7 +7,7 @@ LC_COLLATE=C
 while true
 do
 
-read -p "Enter DataBase Name" DBNAME
+read -p "Enter DataBase Name: " DBNAME
 
 #CHECK EXITANCE
 if [ -e "$DBNAME" ];
@@ -19,7 +19,7 @@ then
 elif [[ ${#DBNAME} -lt 1 || ${#DBNAME} -gt 64 ]];
 then
       	echo " DataBase names must be in range of [1-64]"
-elif [[ $DBNAME =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] ;
+elif [[ $DBNAME =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 then
        	if [[ $DBNAME =~ [[:space:]] ]]
  then
