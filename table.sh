@@ -1,22 +1,5 @@
 #! /bin/bash
-
-read -p " Enter DataBase Name: " dbname
-
-if [ ! -d MyDBMS/$dbname ];
-then
-	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
-	 if [ opt = 'y' -o opt = 'Y' ];
-	 then
-		 source ../creat_DB.sh
-		
-		 cd MyDBMS/$dbname
-	 else
-		source ../DB.sh
-	 fi
- else
-	 cd MyDBMS/$dbname
-fi
-
+function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate"
 do
 	case $option in 
@@ -43,3 +26,24 @@ do
 				;;
 		esac
 	done
+}
+read -p " Enter DataBase Name: " dbname
+
+if [ ! -d ./MyDBMS/$dbname ];
+then
+	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
+	 if [ opt = 'y' -o opt = 'Y' ];
+	 then
+		 source ./creat_DB.sh
+		 echo "database created succeefully with name $dbname"	 
+		source cd ./MyDBMS/$dbname
+		 connection
+	 else
+		source ./DB.sh
+	 fi
+ else
+	source  cd ./MyDBMS/$dbname
+	 connection
+fi
+
+
