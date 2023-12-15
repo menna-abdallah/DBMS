@@ -46,7 +46,6 @@ do
                			 then
                        			 rm -r $path/$dbname
 					 echo "$dbname removed Successfully"
-					 ls $(pwd)
                			 else
                         		 exit
                			 fi
