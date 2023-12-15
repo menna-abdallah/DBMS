@@ -44,7 +44,7 @@ do
     }
 ' "$tabel_name"
 
-'				awk -F: -v replay="$replay" -v value="$value" -v count="$count" 
+'awk -F: -v replay="$replay" -v value="$value" -v count="$count" 
     BEGIN { 
         nf = -1 
     }
