@@ -6,8 +6,6 @@ do
 		"create table")
 			echo "$(pwd)"
 			source ../../create_table.sh
-			echo " created succesfully"
-			`ls $(pwd)`
 			break
 			;;
 		"select")
