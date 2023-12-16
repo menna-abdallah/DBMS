@@ -13,7 +13,12 @@ if [ -e "$DBNAME" ];
 then
 	echo "$DBNAME is alredy exist"
 
-	# in database naming : the name of  
+#start VALIDATION
+
+elif [ -z "$DBNAME" ];
+then
+	echo " DataBase name must not be empty"
+
 # ... ${#DBNAME} = The length of BDNAME
 elif [[ ${#DBNAME} -lt 1 || ${#DBNAME} -gt 64 ]];
 then
@@ -28,8 +33,7 @@ then
 	 mkdir $(pwd)/$DBNAME
          echo " $DBNAME DataBase created successfully"
          break
-
- else
+else
 	 echo "Valid Name"
 	 mkdir $(pwd)/$DBNAME
 	 echo " $DBNAME DataBase created successfully"
