@@ -18,7 +18,7 @@ do
 			source ./update.sh
 			;;
 		"remove")
-			source ./remove.sh
+			source ../../delete_table.sh
 			;;
 		"truncate")
 			source ./truncate.sh
