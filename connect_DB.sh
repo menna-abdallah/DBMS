@@ -1,10 +1,13 @@
 #! /bin/bash
 function connection {
-select option in "create table" "select" "insert" "update" "remove" "truncate"
+select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
 do
 	case $option in 
 		"create table")
 			source ../../create_table.sh
+			echo " created succesfully"
+			`ls $(pwd)/MyDBMS/$dbname `
+			break
 			;;
 		"select")
 			source ../../select.sh
@@ -21,6 +24,9 @@ do
 		"truncate")
 			source ./truncate.sh
 			;;
+		"exit")
+			exit
+			;;
 			*)
 				echo "not valid option"
 				;;
@@ -29,38 +35,10 @@ do
 }
 read -p " Enter DataBase Name: " dbname
 
-<<<<<<< HEAD:table.sh
-if [ ! -d ./MyDBMS/$dbname ];
+if [ ! -d $(pwd)/MyDBMS/$dbname ];
 then
-	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
-	 if [ opt = 'y' -o opt = 'Y' ];
-	 then
-		 source ./creat_DB.sh
-		 echo "database created succeefully with name $dbname"	 
-		source cd ./MyDBMS/$dbname
-		 connection
-	 else
-		source ./DB.sh
-	 fi
- else
+	echo "$dbname not exist"
+else
 	source  cd ./MyDBMS/$dbname
-=======
-if [ ! -d $dbname ];
-then
-	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
-	 if [ $opt = 'y' -o $opt = 'Y' ];
-	 then
-		 source ../creat_DB.sh
-		 echo "database created succeefully with name $dbname"	 
-	       	 source cd ./MyDBMS/$dbname
-		 connection
-	 else
-		source ../DB.sh
-	 fi
- else
-	source  cd $dbname
->>>>>>> main:connect_DB.sh
 	 connection
 fi
-
-

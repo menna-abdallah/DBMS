@@ -6,8 +6,7 @@ LC_COLLATE=C
 #TILL VALID NAME
 while true
 do
-
-read -p "Enter DataBase Name: " DBNAME
+ read -p "Enter DataBase Name: " DBNAME
 
 #CHECK EXITANCE
 if [ -e "$DBNAME" ];
