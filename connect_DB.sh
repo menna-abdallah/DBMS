@@ -4,13 +4,13 @@ select option in "create table" "select" "insert" "update" "remove" "truncate"
 do
 	case $option in 
 		"create table")
-			source ./create_table.sh
+			source ../../create_table.sh
 			;;
 		"select")
-			source ./select.sh
+			source ../../select.sh
 			;;
 		"insert")
-			source ./insert.sh
+			source ../../insert.sh
 			;;
 		"update")
 			source ./update.sh
@@ -29,6 +29,7 @@ do
 }
 read -p " Enter DataBase Name: " dbname
 
+<<<<<<< HEAD:table.sh
 if [ ! -d ./MyDBMS/$dbname ];
 then
 	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
@@ -43,6 +44,22 @@ then
 	 fi
  else
 	source  cd ./MyDBMS/$dbname
+=======
+if [ ! -d $dbname ];
+then
+	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
+	 if [ $opt = 'y' -o $opt = 'Y' ];
+	 then
+		 source ../creat_DB.sh
+		 echo "database created succeefully with name $dbname"	 
+	       	 source cd ./MyDBMS/$dbname
+		 connection
+	 else
+		source ../DB.sh
+	 fi
+ else
+	source  cd $dbname
+>>>>>>> main:connect_DB.sh
 	 connection
 fi
 
