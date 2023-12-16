@@ -3,7 +3,8 @@
 shopt -s extglob
 LC_COLLATE=C
 
-`ls $(pwd)/*.table`
+ls $(pwd) | grep -v '\.metadata'
+
 read -p " Enter the name of table you want to update: " tname
 
 #CHECK EXITANCE
@@ -12,19 +13,25 @@ if [ ! -f "$tname" ];
 		echo " There is no table with that name"
 	else
 		echo which column will you update upon
-		cat .$tname.metadata | cut -f1 -d:
+		cat $tname.metadata | cut -f1 -d:
 		read col
 		# echo "$col"
-		declare -i colNum=$(awk 'BEGIN{FS=":"}{if($1=="'$col'")print NR}' .$tname.metadata
+		
+		declare -i colNum=$(awk 'BEGIN{FS=":"}{if($1=="$col") {print NR}}' $tname.metadata)
 		
 		read " Enter the value you want to update: " value
+		var=$(awk 'BEGIN{FS=":"}{print $(("$col"))}' $tname)
+		
+		echo "$var"
 		
 		####///////////// 
-		if ! [[ $value =~ ^[`awk 'BEGIN{FS=":"}{print $'$col'}' $tname.table`] ]]; 
+		if ! [[ $value =~ ^[`awk 'BEGIN{flag=0}
+		   {print $(("$col"))}' $tname`] ]]; 
 		then
 		echo "there is no such value"
 		return
 		fi
+		
 		oldValue=$value
 		colsNum=$(cat .$tname.metadata |wc -l)
 		read "Enter new value: " valu2
@@ -41,7 +48,7 @@ if [ ! -f "$tname" ];
 			pkTest=1
 			strtTest =1
 		if [[ $colType == "int" ]];
-t		then
+		then
 		if ! [[ $value2 =~ ^[0-9]*$ ]]; 
 		then
         		echo  "this is not an integer value"
@@ -51,8 +58,9 @@ t		then
       		fi
 		else 
 			intTest=1
-		elif [[ $colType == "string" ]];
-t		then
+		fi
+		if [ "$colType" -eq "string" ];
+		then
 		if ! [[ $value =~ ^[a-zA-Z]*$ ]]; 
 		then
         		echo  "this is not an integer value"
@@ -69,7 +77,7 @@ t		then
 		
 		if [[ $PK == "y" ]];
 		then
-			if  [[ $value =~ ^[`awk 'BEGIN{FS=":"}{print $(('$col'))}' $tname.table`] ]]; 
+			if  [[ $value =~ ^[`awk 'BEGIN{FS=":"}{print $(("$col"))}' $tname.table`] ]]; 
 		then
         	echo "This value isn't unique"
         		pkTest=0
@@ -79,7 +87,9 @@ t		then
 		else
         		pkTest=1
 		fi
-		if (( $intTest*$pkTest== ));
+		
+		
+		if (( $intTest*$pkTest == 1));
 		then
 			echo "valid value"
 		else
@@ -91,19 +101,8 @@ t		then
 		}' $tname.table > temptable
 		mv temptable $tname.table
 		
+	fi
 		
 		
-		
-		
-
-		
-		
-		
-		
-		fi
-		
-		
-		
-		fi
 		
 		

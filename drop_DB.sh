@@ -36,7 +36,7 @@ do
 				echo "There is no DataBase"
 				break
 			else
-				ls$(pwd)
+				ls $(pwd)
 			read -p "Enter the name of DataBase: " dbname
 			fi
 			#Check Exitance

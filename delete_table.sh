@@ -3,7 +3,7 @@
 shopt -s extglob
 LC_COLLATE=C
 
-`ls $(pwd)/*.table`
+ls $(pwd) | grep -v '\.metadata'
 read -p " Enter the name of table you want to delete its data: " tname
 
 #CHECK EXITANCE
