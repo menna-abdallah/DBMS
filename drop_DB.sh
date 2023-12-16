@@ -31,10 +31,14 @@ do
 			;;
 
 		"Delete a specific DataBase")
-			ls $(pwd)
-
+			if ((db_no == 0));
+			then
+				echo "There is no DataBase"
+				break
+			else
+				ls$(pwd)
 			read -p "Enter the name of DataBase: " dbname
-
+			fi
 			#Check Exitance
        			 if [ ! -d "$path/$dbname" ];
        			 then

@@ -4,9 +4,10 @@ select option in "create table" "select" "insert" "update" "remove" "truncate" "
 do
 	case $option in 
 		"create table")
+			echo "$(pwd)"
 			source ../../create_table.sh
 			echo " created succesfully"
-			`ls $(pwd)/MyDBMS/$dbname `
+			`ls $(pwd)`
 			break
 			;;
 		"select")
@@ -27,18 +28,19 @@ do
 		"exit")
 			exit
 			;;
-			*)
-				echo "not valid option"
-				;;
+		*)
+			echo "not valid option"
+			;;
 		esac
 	done
 }
 read -p " Enter DataBase Name: " dbname
 
-if [ ! -d $(pwd)/MyDBMS/$dbname ];
+if [ ! -d $(pwd)/$dbname ];
 then
 	echo "$dbname not exist"
 else
-	source  cd ./MyDBMS/$dbname
+	source  cd $dbname
 	 connection
+
 fi
