@@ -32,7 +32,7 @@ do
  	 ;;
 
  	 "Connect A DataBAse")
-
+		 source ../connect_DB.sh
   	;;
 
 	"Exit")
