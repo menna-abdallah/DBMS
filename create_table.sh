@@ -5,8 +5,8 @@ LC_COLLATE=C
 function create_fields(){
 	
 read -p  "enter number of fields :  "  field_num
-typeset -i i=0
-while [ $i -lt $field_num ]
+typeset -i i=1
+while [ $i -le $field_num ]
 do
         typeset -i flagf=1
 read -p  "enter name of field :  "  field_name
@@ -27,8 +27,13 @@ while [ $flagf -eq 1 ]
         read -p "this isn't valid name, please enter name again :  "  field_name
         fi
 done
+if [[ $answer == [yy] ]]
+then
+read -p  "enter Datatype of filed :  "  field_type
+else
 read -p  "enter Datatype of filed :  "  field_type
 read -p  "Is it primary key?(Y/N) :  "  answer
+fi
 export ${field_name}
 export ${field_type}
 export ${answer}
