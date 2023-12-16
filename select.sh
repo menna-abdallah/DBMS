@@ -1,4 +1,7 @@
 #! /bin/bash
+<<<<<<< HEAD
+read -p "Enter name of table" table_name
+=======
 shopt -s extglob 
 
 
@@ -11,17 +14,26 @@ do
    if [ -e $tabel_name ]
 then
 flag=0	
+>>>>>>> main
 select option in "select all" "select record" "select columns"
 do 
 	case $option in
 		"select all")
+<<<<<<< HEAD
+			$(cat) $table_name
+			;;
+		"select record")
+		`awk FS : '{print $0}'`	
+=======
 			cat $tabel_name
 			;;
 		"select record")
 			echo "table fields are:"
 			head -n 1 $tabel_name
-			read -p "write which field you want to build condition on:  " replay 	
-			read -p "Enter value you want to select:  " value 
+			#read -p "write which field you want to build condition on:  " replay 	
+			#read -p "Enter value you want to select:  " value 
+			select opt in `awk -F':' '{ for (i=1; i<=NF; i++) print $i }' $tabel_name`
+			do	
 			select choice in "greater than"   "less than"   "greater than or equal"  "less than or equal"  "equal"
 			do
 				case $choice in 
@@ -148,6 +160,7 @@ do
 						;;
 				esac
 			done
+		done
 		;;
 	"select columns")
 		read -p "Enter number of columns ypu want to retrieve" column_num
@@ -162,3 +175,4 @@ else
 	read -p "table not exist, please enter correct name: " tabel_name
 fi
 done
+>>>>>>> main

@@ -29,6 +29,22 @@ do
 }
 read -p " Enter DataBase Name: " dbname
 
+<<<<<<< HEAD:table.sh
+if [ ! -d ./MyDBMS/$dbname ];
+then
+	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
+	 if [ opt = 'y' -o opt = 'Y' ];
+	 then
+		 source ./creat_DB.sh
+		 echo "database created succeefully with name $dbname"	 
+		source cd ./MyDBMS/$dbname
+		 connection
+	 else
+		source ./DB.sh
+	 fi
+ else
+	source  cd ./MyDBMS/$dbname
+=======
 if [ ! -d $dbname ];
 then
 	read -p "$dbname not exsit , Do you want to creat one? (y / n): " opt
@@ -43,6 +59,7 @@ then
 	 fi
  else
 	source  cd $dbname
+>>>>>>> main:connect_DB.sh
 	 connection
 fi
 
