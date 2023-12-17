@@ -2,11 +2,30 @@
 
 shopt -s extglob
 LC_COLLATE=C
+
+function select_datatype(){
+
+echo "select  Datatype of filed:" 
+select option in int  string
+do
+        case $option in
+        int)
+                field_type="int"
+                ;;
+        string)
+                field_type="string"
+                ;;
+        *)
+                echo "invalid data type"
+esac
+break
+done
+}
 function create_fields(){
 	
 read -p  "enter number of fields :  "  field_num
-typeset -i i=0
-while [ $i -lt $field_num ]
+typeset -i i=1
+while [ $i -le $field_num ]
 do
         typeset -i flagf=1
 read -p  "enter name of field :  "  field_name
@@ -27,12 +46,23 @@ while [ $flagf -eq 1 ]
         read -p "this isn't valid name, please enter name again :  "  field_name
         fi
 done
-read -p  "enter Datatype of filed :  "  field_type
+if [[ $answer == [Yy] ]]
+then
+	select_datatype	
+
+else
+select_datatype
 read -p  "Is it primary key?(Y/N) :  "  answer
+fi
 export ${field_name}
 export ${field_type}
 export ${answer}
+if [ $(wc -l < "$table_name.metadata") -eq 0 ]
+then
 echo $field_type":"$answer >> "$table_name.metadata"
+else
+	echo $field_type":n"  >> "$table_name.metadata"
+fi
 ((i++))
 done
 }
@@ -58,11 +88,15 @@ do
 		 touch "$table_name.metadata"
                  create_fields
 		 echo "your table name is $table_name"
+		 echo "tabel created successfully" 
+                 ls $(pwd) | grep -v '\.metadata$'
 		 flag=0
  		else
 		 touch $table_name
 		 touch "$table_name.metadata"
 	 	 create_fields
+		 echo "tabel created successfully" 
+		 ls $(pwd) | grep -v '\.metadata$' 
 		 flag=0
 		fi		
 	else
@@ -71,3 +105,4 @@ do
 	done
 	((var++))
 done
+#source ../../connect_DB.sh
