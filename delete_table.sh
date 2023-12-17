@@ -33,7 +33,11 @@ read -p " Enter the name of table you want to delete its data: " tname
 				                        field_no=$REPLY
 				                        break
 			                        done	
-				                        read -p "Enter value you want to delete:  " value 
+				                        read -p "Enter value you want to delete:  " value
+						       if [  `grep -F "$value" "$tname" | wc -w` -eq 0 ];
+						       then
+    								echo "there is no such value"	
+							else
 				                        if [[ $value =~ ^[0-9]*$ ]];
 				                                then
 				                                
@@ -82,6 +86,7 @@ read -p " Enter the name of table you want to delete its data: " tname
 						                        mv temp $tname
 						                  
 			                                fi
+						       fi
 		                        ;;
 	                                "Delete Colums")
 		                                echo "choose the condition colum:"
@@ -110,3 +115,4 @@ read -p " Enter the name of table you want to delete its data: " tname
                                 esac
                         done
         fi
+	
