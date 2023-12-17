@@ -88,7 +88,6 @@ do
 	"select columns")
 					cut -d":" -f1 "$tabel_name.metadata" | nl -w1  
 					read -p "please enter number of each column you want to retrieve it from those fields:  " columns
-					awk -F: '{print $@}' $tabel_name
 					for column in $columns; 
 					do
 					echo "Values in column Number $column are:"  
