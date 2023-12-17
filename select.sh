@@ -1,79 +1,53 @@
 #! /bin/bash
-<<<<<<< HEAD
-read -p "Enter name of table" table_name
-=======
-shopt -s extglob 
 
+echo "tabels in your database are :"
+ls $(pwd) | grep -v '\.metadata' 
+
+read -p "Enter name of tabel:  " tabel_name
+shopt -s extglob 
+export LC_COLLATE=C
 
 typeset -i count=1
-read -p "Enter name of table:   "  tabel_name
 flag=1
-nf="kkkk"
 while [ $flag = 1 ]
 do
    if [ -e $tabel_name ]
 then
 flag=0	
->>>>>>> main
+
 select option in "select all" "select record" "select columns"
 do 
 	case $option in
 		"select all")
-<<<<<<< HEAD
-			$(cat) $table_name
-			;;
-		"select record")
-		`awk FS : '{print $0}'`	
-=======
 			cat $tabel_name
 			;;
 		"select record")
-			echo "table fields are:"
-			head -n 1 $tabel_name
-			#read -p "write which field you want to build condition on:  " replay 	
-			#read -p "Enter value you want to select:  " value 
-			select opt in `awk -F':' '{ for (i=1; i<=NF; i++) print $i }' $tabel_name`
+			echo "tabel fields are:"
+			#cut -d":" -f1  "$tabel_name.metadata" | nl -w1
+			select opt in `cut -d":" -f1 "$tabel_name.metadata"`
 			do	
+				read -p "Enter value you want to select:  " value 
 			select choice in "greater than"   "less than"   "greater than or equal"  "less than or equal"  "equal"
 			do
 				case $choice in 
 					"greater than")
 	# -v  used to assign a value to an awk variable from the shell.
-	awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
-    BEGIN {
-        nf = -1
-    }
+
+awk -v value="$value" -v field="$REPLY" -F: '
     NR == 1 {
+        nf = 0
         for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
+            if ($i == field) {
                 nf = i
                 break
             }
         }
     }
-    NR >= 2 && nf != -1 && $nf > value {
+    NR >= 2 && nf != 0 && $nf > value {
         print $0
     }
 ' "$tabel_name"
-
-'awk -F: -v replay="$replay" -v value="$value" -v count="$count" 
-    BEGIN { 
-        nf = -1 
-    }
-    if (NR == 1) {
-        for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
-                nf = i
-                break
-            }
-        }
-    }
-    if (NR >= 2 && nf != -1 && $nf > value) {
-        print $0
-    }
- "$tabel_name"
-'
-						;;
+;;
 					"less than")
 						awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
     BEGIN {
@@ -163,8 +137,27 @@ do
 		done
 		;;
 	"select columns")
-		read -p "Enter number of columns ypu want to retrieve" column_num
-
+		read -p "Enter number of columns you want to retrieve:  " column_num
+		select opt in "select all values in columns" "select supecific values"
+		do
+			case $opt in 
+				"select all values in columns")
+					cut -d":" -f1 "$tabel_name.metadata" | nl -w1  
+					read -p "please enter number of each column you want to retrieve it:  " column
+					# Read the values from the column into an array
+					read -r -a columns <<< "$column"
+					for (( i=1 ; i<=${#columns[@]}; i++));
+					do
+						var=$(( ${columns[i]} + 1 ))
+						cut -d":" -f$var $tabel_name < temp | cat 		
+					done
+						;;
+			"select supecific values")
+				;;
+			*)
+				echo "please select valid option"
+		esac
+	done
 		;;
 	*)
 		echo "invalid choice"
@@ -175,4 +168,4 @@ else
 	read -p "table not exist, please enter correct name: " tabel_name
 fi
 done
->>>>>>> main
+

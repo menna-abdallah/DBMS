@@ -1,4 +1,6 @@
 #! /bin/bash
+shopt -s extglob 
+export LC_COLLATE=C
 function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
 do
