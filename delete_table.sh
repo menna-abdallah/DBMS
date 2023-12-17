@@ -89,12 +89,17 @@ read -p " Enter the name of table you want to delete its data: " tname
 			                        do
 				                        field_no=$REPLY
 				                        break
-			                        done	
-			                        #awk -F: 'BEGIN{NR=$field_no}{if ($3 = 'y' || $3 ='Y') print {"you can not remove primary colum"}'
+			                        done
 			                        
+			                        PK=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $3}}' "$tname.metadata")
+			                       
+			                       if [[ $PK == "y"  || $PK == "Y" ]];
+			                       then
+			                          echo " you can not delete a primary key"
+			                       else			                        
 				                cut -d: -f"$field_no" --complement "$tname" >> temp
 						mv temp $tname
-					
+					        fi
 	                                ;;	
 	                                "EXIT")
 	                                        exit

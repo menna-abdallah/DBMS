@@ -3,7 +3,7 @@
 shopt -s extglob
 LC_COLLATE=C
 
-ls $(pwd) | grep -v '\.metadata'
+ls $(pwd) | grep -v '.metadata'
 
 read -p " Enter the name of table you want to update: " tname
 
@@ -12,97 +12,69 @@ if [ ! -f "$tname" ];
 	then
 		echo " There is no table with that name"
 	else
-		echo which column will you update upon
-		cat $tname.metadata | cut -f1 -d:
-		read col
-		# echo "$col"
 		
-		declare -i colNum=$(awk 'BEGIN{FS=":"}{if($1=="$col") {print NR}}' $tname.metadata)
+		echo "choose the condition colum:"
+			select opt in $(cut -d":" -f1 "$tname.metadata")
+				do
+				 	field_no=$REPLY
+				        break
+			       	done	
 		
-		read " Enter the value you want to update: " value
-		var=$(awk 'BEGIN{FS=":"}{print $(("$col"))}' $tname)
+		read -p " Enter the value you want to update: " value
+		echo $value
 		
-		echo "$var"
+		if ! grep -q "^$value:" "$tname" ; then
+    			echo "there is no such value"
+    		else
 		
-		####///////////// 
-		if ! [[ $value =~ ^[`awk 'BEGIN{flag=0}
-		   {print $(("$col"))}' $tname`] ]]; 
-		then
-		echo "there is no such value"
-		return
+			read -p "Enter new value: " valu2
 		fi
 		
-		oldValue=$value
-		colsNum=$(cat .$tname.metadata |wc -l)
-		read "Enter new value: " valu2
-		
-		for ((col=1;col<=$colsNum;col++));
-		do
-		# colName=$(awk 'BEGIN{FS=":"}{if(NR=='$col') print $1}' $tname.metadata)
-		colType=$(awk 'BEGIN{FS=":"}{if(NR=='$col') print $2}' $tname.metaata)
-		PK=$(awk 'BEGIN{FS=":"}{if(NR=='$col') print $3}' $tname.metadata)
+			col_DataType=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $2}}' "$tname.metadata")
+			PK=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $3}}' "$tname.metadata")
+			oldValue=$value
+			colsNum=$(cat "$tname.metadata" |wc -l)
 		
 		if  [[ $value2 != "" ]];
 		then
 			intTest=1
 			pkTest=1
-			strtTest =1
-		if [[ $colType == "int" ]];
+			strtTest=1
+		fi
+		
+		if [[ $col_DataType == "int"  && $value =~ ^[0-9]*$ ]];
 		then
-		if ! [[ $value2 =~ ^[0-9]*$ ]]; 
-		then
+      			intTest=1
+      			echo "$intTest"
+      		else
         		echo  "this is not an integer value"
         		intTest=0
-      		else
-      			intTest=1
       		fi
-		else 
-			intTest=1
-		fi
-		if [ "$colType" -eq "string" ];
-		then
-		if ! [[ $value =~ ^[a-zA-Z]*$ ]]; 
-		then
-        		echo  "this is not an integer value"
-        		strTest=0
-      		else
-      			strTest=1
-      		fi
-		else 
-			strTest=1
-		fi
-		fi
-		
-		#check for primary
-		
-		if [[ $PK == "y" ]];
-		then
-			if  [[ $value =~ ^[`awk 'BEGIN{FS=":"}{print $(("$col"))}' $tname.table`] ]]; 
-		then
-        	echo "This value isn't unique"
-        		pkTest=0
-        	else
-       			 pkTest=1
-        	fi
-		else
-        		pkTest=1
-		fi
-		
-		
-		if (( $intTest*$pkTest == 1));
+      		
+      	if [[ $PK =~ [yY] ]]; then
+    	if awk -v col="$field_no" -F: '{print $col}' "$tname" | grep -q "^$value2$"; then
+     	   echo "This value isn't unique"
+     	   pkTest=0
+   	 else
+   	     pkTest=1
+    	fi
+	fi
+
+        	
+        	if (( $intTest*$pkTest == 1));
 		then
 			echo "valid value"
+		awk -F: '
+		{for(i=1;i <= NF; i++)
+		{if($i~"$oldvalue"){$i="$value"; print $0}}
+		}' $tname > temptable
+		mv temptable $tname
+		echo "Updated SUccessfully"
+		cat $tname
 		else
 			echo "invalid"
-		fi
-		awk -F: '
-		{for(i=1;i<NF;i++)
-		{if($i~"$oldvalue"){$i="$value"; print $0}}
-		}' $tname.table > temptable
-		mv temptable $tname.table
-		
-	fi
-		
-		
+		fi	
+	
+	fi	
 		
 		
