@@ -24,6 +24,8 @@ do
 		"select record")
 			echo "tabel fields are:"
 			#cut -d":" -f1  "$tabel_name.metadata" | nl -w1
+			echo "select one attribute to build your condition on:"
+
 			select opt in `cut -d":" -f1 "$tabel_name.metadata"`
 			do
 				replay=$REPLY	
@@ -84,32 +86,18 @@ do
 		done
 		;;
 	"select columns")
-		read -p "Enter number of columns you want to retrieve:  " column_num
-		select opt in "select all values in columns" "select supecific values"
-		do
-			case $opt in 
-				"select all values in columns")
 					cut -d":" -f1 "$tabel_name.metadata" | nl -w1  
-					read -p "please enter number of each column you want to retrieve it:  " column
-					# Read the values from the column into an array
-					read -r -a columns <<< "$column"
-					for (( i=1 ; i<=${#columns[@]}; i++));
+					read -p "please enter number of each column you want to retrieve it from those fields:  " columns
+					awk -F: '{print $@}' $tabel_name
+					for column in $columns; 
 					do
-						var=$(( ${columns[i]} + 1 ))
-						cut -d":" -f$var $tabel_name < temp | cat 		
+					echo "Values in column Number $column are:"  
+					cut -d":" -f$column   "$tabel_name" 
+					#cat temp	
+					#awk -F: '{ print $('$column') }' "$tabel_name"
 					done
-						;;
-			"select supecific values")
-				;;
-			*)
-				echo "please select valid option"
-		esac
-	done
-		;;
-	*)
-		echo "invalid choice"
-		;;
-esac
+				#rm temp
+				esac
 done
 else 
 	read -p "table not exist, please enter correct name: " tabel_name

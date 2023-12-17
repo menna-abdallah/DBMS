@@ -6,7 +6,6 @@ select option in "create table" "select" "insert" "update" "remove" "truncate" "
 do
 	case $option in 
 		"create table")
-			echo "$(pwd)"
 			source ../../create_table.sh
 			break
 			;;
@@ -35,12 +34,16 @@ do
 	done
 }
 read -p " Enter DataBase Name: " dbname
-
+flag=0
+while [ $flag = 0 ]
+do
 if [ ! -d $(pwd)/$dbname ];
 then
-	echo "$dbname not exist"
+	read -p"$dbname not exist, please enter name of again : " dbname
 else
+flag=1
 	source  cd $dbname
 	 connection
 
 fi
+done

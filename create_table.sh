@@ -57,9 +57,9 @@ fi
 export ${field_name}
 export ${field_type}
 export ${answer}
-is_pK_define=$(awk -F: '$3 == "Y" || $3 == "y" {print 1}' "$table_name.metadata")
+is_pk_define=$(awk -F: '$3 == "Y" || $3 == "y" {print 1}' "$table_name.metadata")
 #is_pK_define=`awk -F: '{ if ( $3 == "Y" || $3 == "y"` ) {print 1} }' "$table_name.metadata"
-if [ $(wc -l < "$table_name.metadata") -eq 0 -a ! $is_pk_define -eq 1 ]
+if [[ $(wc -l < "$table_name.metadata") -eq 0  ||  $is_pk_define -ne 1 ]]
 then
 echo $field_type":"$answer >> "$table_name.metadata"
 else

@@ -1,0 +1,4 @@
+name:string:n
+ssd:string:y
+phone:string:n
+age:int:n
