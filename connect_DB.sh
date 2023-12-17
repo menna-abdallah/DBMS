@@ -15,7 +15,7 @@ do
 			source ../../insert.sh
 			;;
 		"update")
-			source ./update.sh
+			source ../../table_update.sh
 			;;
 		"remove")
 			source ../../delete_table.sh
