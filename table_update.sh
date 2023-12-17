@@ -34,7 +34,7 @@ if [ ! -f "$tname" ];
 			colsNum=$(cat "$tname.metadata" |wc -l)
 		if  [[ $value2 != "" ]];
 		then
-			echo "allowed" 
+		
 			intTest=1
 			pkTest=1
 			strtTest=1
@@ -47,7 +47,6 @@ if [ ! -f "$tname" ];
 			if [[ $value2 =~ ^[0-9]*$ ]];
 			then
       				intTest=1
-      				echo "$intTest"
       			else
         			echo  "this is not an integer value"
         			intTest=0
@@ -85,6 +84,7 @@ if [ ! -f "$tname" ];
       		}' "$tname" > temptable
     		mv temptable "$tname"
     		echo "Updated Successfully"
+		echo "-----------------------Table after updated-----------------------"
     		cat "$tname"
 		else
 			echo "invalid"
