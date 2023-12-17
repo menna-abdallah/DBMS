@@ -1,11 +1,11 @@
 #! /bin/bash
 
-echo "tabels in your database are :"
-ls $(pwd) | grep -v '\.metadata' 
-
-read -p "Enter name of tabel:  " tabel_name
 shopt -s extglob 
 export LC_COLLATE=C
+
+echo "tabels in your database are :"
+ls $(pwd) | grep -v '\.metadata'
+read -p "Enter name of tabel:  " tabel_name
 
 typeset -i count=1
 flag=1
@@ -25,109 +25,56 @@ do
 			echo "tabel fields are:"
 			#cut -d":" -f1  "$tabel_name.metadata" | nl -w1
 			select opt in `cut -d":" -f1 "$tabel_name.metadata"`
-			do	
+			do
+				replay=$REPLY	
 				read -p "Enter value you want to select:  " value 
 			select choice in "greater than"   "less than"   "greater than or equal"  "less than or equal"  "equal"
 			do
 				case $choice in 
 					"greater than")
-	# -v  used to assign a value to an awk variable from the shell.
+					      # -v  used to assign a value to an awk variable from the shell.
+						awk -v value="$value" -v field="$replay" -F: '
+						{ 
+							if ( $field > value ) { print $0 }
+						}					
 
-awk -v value="$value" -v field="$REPLY" -F: '
-    NR == 1 {
-        nf = 0
-        for (i = 1; i <= NF; i++) {
-            if ($i == field) {
-                nf = i
-                break
-            }
-        }
-    }
-    NR >= 2 && nf != 0 && $nf > value {
-        print $0
-    }
-' "$tabel_name"
-;;
+						' "$tabel_name"
+						;;
 					"less than")
-						awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
-    BEGIN {
-        nf = -1
-    }
-    NR == 1 {
-        for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
-                nf = i
-                break
-            }
-        }
-    }
-    NR >= 2 && nf != -1 && $nf < value {
-        print $0
-    }
-' "$tabel_name"
+						awk -v value="$value" -v field="$replay" -F: '
+						{ 
+        						if ( $field < value ) { print $0 }
+        					}	
 
+						' "$tabel_name"
 
 						;;
 					"greater than or equal")
-                                                awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
-    BEGIN {
-        nf = -1
-    }
-    NR == 1 {
-        for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
-                nf = i
-                break
-            }
-        }
-    }
-    NR >= 2 && nf != -1 && $nf >= value {
-        print $0
-    }
-' "$tabel_name"
+                                                awk -v value="$value" -v field="$replay" -F: '
+						{ 
+        						if ( $field >= value ) { print $0 }
+        					}
 
+						' "$tabel_name"
 
                                                 ;;
                                         "less than or equal")
-                                                awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
-    BEGIN {
-        nf = -1
-    }
-    NR == 1 {
-        for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
-                nf = i
-                break
-            }
-        }
-    }
-    NR >= 2 && nf != -1 && $nf <= value {
-        print $0
-    }
-' "$tabel_name"
+                                                awk -v value="$value" -v field="$replay" -F: '
+						{ 
+        						if ( $field <= value ) { print $0 }
+        					}
 
+						' "$tabel_name"
 
                                                 ;;
 
 					"equal")
-						awk -F: -v replay="$replay" -v value="$value" -v count="$count" '
-    BEGIN {
-        nf = -1
-    }
-    NR == 1 {
-        for (i = 1; i <= NF; i++) {
-            if ($i == replay) {
-                nf = i
-                break
-            }
-        }
-    }
-    NR >= 2 && nf != -1 && $nf == value {
-        print $0
-    }
-' "$tabel_name"
+						awk -v value="$value" -v field="$replay" -F: '
+						{ 
+        						if ( $field == value ) { print $0 }
+        					}
 
-
+						' "$tabel_name"
 						;;
 						*)
 						echo "invalid choice"

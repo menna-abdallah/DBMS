@@ -1,13 +1,8 @@
 #! /bin/bash
-function PK() {
-        ispk=`sed -n "${i}p" "$tabel_name.metadata" | cut -d":" -f3`
 
-        if [[ $ispk == [Yy] ]]
-        then
-                check=`cut -d":" -f$i $tabel_name | awk -F: 'BEGIN{flag=0}{ if($i==$field_value){flag=1; break}} END{print $flag}'`
-		return $check
-fi
-}
+shopt -s extglob
+export LC_COLLATE=C
+
 function append() {
 if (( $i == $columns ))
                         then
@@ -22,14 +17,12 @@ function checktype() {
 	dataType=`sed -n "${i}p" "$tabel_name.metadata" | cut -d":" -f2`
 	ispk=`sed -n "${i}p" "$tabel_name.metadata" | cut -d":" -f3`
 	typeset -i check=3
-	#echo $check
 	#start check
                 if [[ $ispk == [Yy] ]]
                 then
 		check=`cut -d":" -f$i $tabel_name |  awk -F:  -v field_value="$field_value"  'BEGIN{flag=0}{ if( $i==field_value ){flag=1; exit}} END{print flag}' `
                 fi
 		# end check
-		echo $check
 		#start add
 		if [[ $check == 3 || $check == 0 ]]
 		then 
@@ -71,7 +64,6 @@ else
 typeset -i i=1
 fields=$(cut -d':' -f1 "$tabel_name.metadata")
 # Prompt for input for each field
-#typeset -i columns=0
 columns=` cat "$tabel_name.metadata" | wc -l `
 for (( i=1 ; i<=$columns ; i++));
 do
@@ -81,4 +73,3 @@ do
     #echo -n "$field_value:" >> "$tabel_name"  # Append each value on a new line
 done
 fi
-echo " "
