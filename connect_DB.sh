@@ -1,6 +1,12 @@
 #! /bin/bash
+<<<<<<< HEAD
 shopt -s extglob 
 export LC_COLLATE=C
+=======
+echo "Enter the name of the schema : "
+ls $pwd
+
+>>>>>>> menna
 function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
 do
@@ -14,9 +20,10 @@ do
 			;;
 		"insert")
 			source ../../insert.sh
+			echo " To insert new record enter 3 or Enter 7 to Exit"
 			;;
 		"update")
-			source ./update.sh
+			source ../../table_update.sh
 			;;
 		"remove")
 			source ../../delete_table.sh
@@ -32,6 +39,7 @@ do
 			;;
 		esac
 	done
+	echo "please Enter operation to do on table or enter 7 to Exit "
 }
 read -p " Enter DataBase Name: " dbname
 flag=0
