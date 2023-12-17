@@ -1,10 +1,12 @@
 #! /bin/bash
+echo "Enter the name of the schema : "
+ls $pwd
+
 function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
 do
 	case $option in 
 		"create table")
-			echo "$(pwd)"
 			source ../../create_table.sh
 			break
 			;;
@@ -13,6 +15,7 @@ do
 			;;
 		"insert")
 			source ../../insert.sh
+			echo " To insert new record enter 3 or Enter 7 to Exit"
 			;;
 		"update")
 			source ../../table_update.sh
@@ -31,6 +34,7 @@ do
 			;;
 		esac
 	done
+	echo "please Enter operation to do on table or enter 7 to Exit "
 }
 read -p " Enter DataBase Name: " dbname
 

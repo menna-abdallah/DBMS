@@ -5,7 +5,8 @@ export LC_COLLATE=C
 
 # get the current path
 path=`pwd`
-
+ls $pwd
+echo "please enter your choice or enter 3 to Exit "
 declare -i db_no=`ls $path | wc -w`
 select del_choice in "Delete all DataBases" "Delete a specific DataBase" "EXIT"
 do
