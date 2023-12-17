@@ -1,12 +1,9 @@
 #! /bin/bash
-<<<<<<< HEAD
 shopt -s extglob 
 export LC_COLLATE=C
-=======
 echo "Enter the name of the schema : "
 ls $pwd
 
->>>>>>> menna
 function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
 do

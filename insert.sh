@@ -25,12 +25,16 @@ function checktype() {
 		while [ $flagpk = 0 ]
 		do
 		       if [[ $ispk == [Yy] ]]
-                then
-                check=`cut -d":" -f$i $tabel_name |  awk -F:  -v field_value="$field_value"  'BEGIN{flag=0}{ if( $i==field_value ){flag=1; exit}} END{print flag}' `
-                fi
-
-		if [[ $check == 3 || $check == 0 ]]
-		then 
+                	then
+			if [[ $field_name == "" ]]
+		        then
+			read -p "primary key can't be null, please enter value" field_value
+			else
+                	check=`cut -d":" -f$i $tabel_name |  awk -F:  -v field_value="$field_value"  'BEGIN{flag=0}{ if( $i==field_value ){flag=1; exit}} END{print flag}' `
+			fi	
+		       	fi
+			if [[ $check == 3 || $check == 0 ]]
+			then 
 			while [ $flagtype = 0 ]
 			do
 			#start check data type

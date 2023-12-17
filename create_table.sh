@@ -31,7 +31,11 @@ do
 read -p  "enter name of field :  "  field_name
 while [ $flagf -eq 1 ]
         do
-        if [[ $field_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
+	if [[ $field_name == "" ]]
+        then
+		read -p "field name can't be empty, please enter valid name :  " field_name
+
+        elif [[ $field_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
         then
                 if [[ $field_name =~ [[:space:]] ]]
                 then
@@ -74,13 +78,15 @@ typeset -i var=0
 typeset -i flag=1
 while [ $var -lt $table_num ]
 do
+	read -p  "enter name of table :  "  table_name
 	while [ $flag -eq 1 ]
 	do
-	read -p  "enter name of table :  "  table_name
-	if [[ -e $table_name ]]
+	if [[ $table_name == "" ]]
+	then
+		read -p "tabel name can't be wmpty , please enter valid name: " table_name
+	elif [[ -e $table_name ]]
 	then 
-		echo "table already exist"
-		flag=0
+		read -p "table already exist, please enter name : " table_name
 	elif [[ $table_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 	then
        		if [[ $table_name =~ [[:space:]] ]]

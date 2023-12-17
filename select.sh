@@ -86,16 +86,10 @@ do
 		done
 		;;
 	"select columns")
-					cut -d":" -f1 "$tabel_name.metadata" | nl -w1  
-					read -p "please enter number of each column you want to retrieve it from those fields:  " columns
-					for column in $columns; 
-					do
-					echo "Values in column Number $column are:"  
-					cut -d":" -f$column   "$tabel_name" 
-					#cat temp	
-					#awk -F: '{ print $('$column') }' "$tabel_name"
-					done
-				#rm temp
+			
+					read -p "please enter number of each column you want to retrieve it from those fields:  " column
+					awk -F: '{ print $('$column') }' "$tabel_name"
+
 				esac
 done
 else 
