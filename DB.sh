@@ -13,7 +13,7 @@ then
 else
 	cd "$path/MyDBMS"
 fi
-
+echo "-------------------------Welcome to our Database Managment System-----------------------------------"
 # start select
 
 select choice in "Creat New DataBase" "List Your DataBase" "Drop Your DataBase" "Connect A DataBAse" "Exit"
@@ -24,6 +24,7 @@ do
 		source ../creat_DB.sh
   	;;
 	"List Your DataBase")
+		echo " DataBase schemas are : "
 		ls $(pwd)
   	;;
 
@@ -42,6 +43,8 @@ do
   	echo "Please, select a suitable action"
   	;;
 	esac
+	        echo "please enter your choice or enter 5 to Exit "
+
 done
 
 
