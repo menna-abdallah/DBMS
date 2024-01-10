@@ -49,15 +49,14 @@ ls "$path/MyDBMS"
  
 	read -p "Enter DataBase Name: " dbname
 	flag=0
-	if [ $dbname = "" ]
-	then 
-	read -p "please enter DataBase Name: "  dbname
-	else
-	while [ $flag = 0 ]
+	while [ $flag -eq 0 ]
 	do
-		if [ ! -d "$path"/MyDBMS/$dbname ];
+		if [[ -z $dbname ]]
+		then 
+		read -p "please enter DataBase Name: "  dbname
+		elif [ ! -d "$path"/MyDBMS/$dbname ];
 		then
-			read -p"$dbname not exist, please enter name of again : " dbname
+			read -p "$dbname not exist, please enter name of again : " dbname
 		else
 		flag=1
 		 # cd "$path"/$dbname

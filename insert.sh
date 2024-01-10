@@ -79,10 +79,14 @@ read -p "select  name of tabel you want to insert into:  "  tabel_name
 flag_tabel=0
 while [ $flag_tabel = 0 ]
 do
-	if [ ! -e "$path/MyDBMS/$dbname/$tabel_name" ]
+	if [[ $tabel_name == "" ]]
+	then
+			read -p "tabel name is empty , please enter name again: " tabel_name
+	elif [ ! -e "$path/MyDBMS/$dbname/$tabel_name" ]
 	then 
-		read -p  "table not exist, please enter name again :  " tabel_name
+		read -p  "tabel not exist, please enter name again :  " tabel_name
 	else 
+		echo "enter imsert"
 		flag_tabel=1
 		typeset -i i=1
 		fields=$(cut -d':' -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata")
@@ -96,6 +100,7 @@ do
 		#echo -n "$field_value:" >> "$tabel_name"  # Append each value on a new line
 		done
 		echo "------------------recored inserted successfully--------------------------------"
+	
 	fi
 done
 echo "------------------tables in schema $dbname are------------------------------"

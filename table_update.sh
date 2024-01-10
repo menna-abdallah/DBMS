@@ -23,9 +23,7 @@ else
 	done	
 	read -p " Enter the value you want to update: " value
 	check=$(awk -F: -v value="$value" -v field_no="$field_no" '{ if ( $field_no == value ) {print value; print $1}}' "$path/MyDBMS/$dbname/$tname")
-	echo $check
 	# check=`awk -F: -v value="$value" -v field="$field_no" '{ if ( $field == value ) print 1 }' "$path/MyDBMS/$dbname/$tname"`
-	echo $check
 	if [[ $check == '0' ]];
 	then
 		echo "there is no such value"
@@ -52,14 +50,16 @@ else
 		else
 			echo  "this is not an integer value"
 			intTest=0
+			break;
 		fi
 	else 
-		if [[ $value2 =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ || $value2 =~ ^[0][0-9]*$  ]] ;
+		if [[ $value2 =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ || $value2 =~ ^[0][0-9]*$ ]] ;
 		then
 			strTest=1
 		else
 			echo  "this is not an string value"
 			strTest=0
+			break;
 		fi
 	fi
 		
@@ -76,18 +76,15 @@ else
 
 	if (( (intTest * pkTest == 1) || (strTest * pkTest == 1) ));
 	then
-		echo "valid value"
+		
 		awk -F: -v oldvalue="$oldValue" -v value2="$value2" -v col="$field_no" '
-		{
-			for (i = 1; i <= NF; i++) 
-			{
-				if ($i == oldvalue) 
-				{
-					$i = value2;
-				}
-			}
-			print $0;
-		}' "$path/MyDBMS/$dbname/$tname" > temptable
+		    BEGIN { OFS=":"; }
+    {
+        if ($col == oldvalue) {
+            $col = value2;
+        }
+        print $0;
+    }' "$path/MyDBMS/$dbname/$tname" > temptable
 		mv temptable "$path/MyDBMS/$dbname/$tname"
 		echo "Updated Successfully"
 		echo "-----------------------Table after updated-----------------------"
