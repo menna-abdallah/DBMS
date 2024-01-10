@@ -46,24 +46,27 @@ else
 									"greater than")
 										awk -v value="$value" -v field_no="$field_no" -F: '
 										{ 
-											if ( field_no <= value ) print $0 
+											if ( $field_no <= value ) print $0 
 										}' "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
+										rm "$path/MyDBMS/$dbname/$tname"
 										mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
 										
 									;;
 									"less than")
 										awk -v value="$value" -v field_no="$field_no" -F: '
 										{ 
-											if ( field_no >= value ) print $0 
+											if ( $field_no >= value ) print $0 
 										}' "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
+										rm "$path/MyDBMS/$dbname/$tname"
 										mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
 									;;
 									"equal")
 										awk -v value="$value" -v field_no="$field_no" -F: '
 										{ 
-											if ( field_no != value ) print $0 
-										}' "$path/MyDBMS/$dbname/$tname" #>> "$path/MyDBMS/$dbname/temp" 
-										#mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
+											if ( $field_no != value ) print $0 
+										}' "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
+										rm "$path/MyDBMS/$dbname/$tname"
+										mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
 									;;
 									"Exit")
 										exit
@@ -78,26 +81,29 @@ else
 							{ 
 								if ($field_no != value) {print $0} 
 							}' "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
+							rm "$path/MyDBMS/$dbname/$tname"
 							mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
 					fi
 				fi
 			;;
 			"Delete Colums")
 				echo "choose the condition colum:"
-				select opt in `cut -d":" -f1 "$tname.metadata"`
+				select opt in $(cut -d":" -f1 "$path/MyDBMS/$dbname/$tname.metadata")
 				do
 					field_no=$REPLY
 					break
 				done
 					
-				PK=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $3}}' "/$tname.metadata")
+			    PK=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $3}}' "$path/MyDBMS/$dbname/$tname.metadata")
 					
 				if [[ $PK == "y"  || $PK == "Y" ]];
 				then
 					echo " you can not delete a primary key"
 				else			                        
 					cut -d: -f"$field_no" --complement "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
+					rm "$path/MyDBMS/$dbname/$tname"
 					mv "$path/MyDBMS/$dbname/temp"  "$path/MyDBMS/$dbname/$tname"
+					
 				fi
 			;;	
 			"EXIT")
@@ -113,3 +119,5 @@ fi
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
 echo  -n "to connect another schema, "
 source ./connect_DB.sh
+
+
