@@ -3,44 +3,49 @@
 shopt -s extglob
 LC_COLLATE=C
 
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 #TILL VALID NAME
 while true
 do
  read -p "Enter DataBase Name: " DBNAME
 
 #CHECK EXITANCE
-if [ -e "$DBNAME" ];
+if [ -z "$DBNAME" ];
 then
-	echo "$DBNAME is alredy exist"
+	echo -e "${RED}DataBase name must not be empty${ENDCOLOR}"
 
-#start VALIDATION
-
-elif [ -z "$DBNAME" ];
+elif [ -e "$(pwd)/MyDBMS/$DBNAME" ];
 then
-	echo " DataBase name must not be empty"
+	echo -e "${YELLOW}$DBNAME is alredy exist${ENDCOLOR}"
 
 # ... ${#DBNAME} = The length of BDNAME
 elif [[ ${#DBNAME} -lt 1 || ${#DBNAME} -gt 64 ]];
 then
-      	echo " DataBase names must be in range of [1-64]"
+      	echo -e "${RED}DataBase names must be in range of [1-64]${ENDCOLOR}"
 elif [[ $DBNAME =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 then
        	if [[ $DBNAME =~ [[:space:]] ]]
  then
-	 echo " DataBase Name is unvalid with spaces"
+	 echo -e "${YELLOW}DataBase Name is unvalid with spaces${ENDCOLOR}"
 	 DBNAME=${DBNAME// /_}
-	 echo "your DataBase name is $DBNAME"
+	 echo -e "your DataBase name is ${BLUE} $DBNAME ${ENDCOLOR}"
 	 mkdir "$(pwd)/MyDBMS"/$DBNAME
-         echo " $DBNAME DataBase created successfully"
+         echo -e "${GREEN}$DBNAME DataBase created successfully${ENDCOLOR}"
          break
 else
 	 echo "Valid Name"
 	 mkdir "$(pwd)/MyDBMS"/$DBNAME
-	 echo " $DBNAME DataBase created successfully"
+     echo -e "${GREEN}$DBNAME DataBase created successfully${ENDCOLOR}"
 	 break
 fi
 else
-	echo "Invalid Name"
+	echo -e "${RED} $DBNAME is an Invalid Name ${ENDCOLOR}"
 fi
 
 done

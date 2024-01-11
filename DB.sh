@@ -1,5 +1,9 @@
 #!/usr/bin/bash
-
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
 shopt -s extglob
 export LC_COLLATE=C
 
@@ -15,7 +19,8 @@ then
 	#cd "$path"/MyDBMS
 fi
 #echo "$path"
-echo "-------------------------Welcome to our Database Managment System-----------------------------------"
+echo -e "${GREEN}-------------------------Welcome to our Database Managment System-----------------------------------${ENDCOLOR}"
+
 # start select
 
 
@@ -26,7 +31,7 @@ do
 			source ./creat_DB.sh
   	;;
 	"List Your DataBase")
-			echo " DataBase schemas are : "
+			echo -e "${LIGHTBLUE}DataBase schemas are : ${ENDCOLOR}"
 			ls "$path/MyDBMS" 
   	;;
 
@@ -42,7 +47,7 @@ do
 		exit
 	;;
   	*)
-			echo "Please, select a suitable action"
+			echo -e "${YELLOW}Please, select a suitable action${ENDCOLOR}"
   	;;
 	esac
 	        echo "please enter your choice or enter 5 to Exit "
