@@ -2,6 +2,13 @@
 shopt -s extglob 
 export LC_COLLATE=C
 
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 path=`pwd`
 function connection {
 select option in "create table" "select" "insert" "update" "remove" "truncate" "exit"
@@ -42,9 +49,9 @@ do
 declare -i db_no=`ls "$path"/MyDBMS | wc -w`
 if (( db_no == 0));
 then 
-	echo " There is no schemas yet!!"
+	echo -e "${YELLOW}There is no schemas yet!!${ENDCOLOR}"
 else
-echo "your schemas are : " 
+echo -e "${BLUE}your schemas are : ${ENDCOLOR}" 
 ls "$path/MyDBMS"
  
 	read -p "Enter DataBase Name: " dbname
@@ -56,7 +63,8 @@ ls "$path/MyDBMS"
 		read -p "please enter DataBase Name: "  dbname
 		elif [ ! -d "$path"/MyDBMS/$dbname ];
 		then
-			read -p "$dbname not exist, please enter name of again : " dbname
+			echo -e "${RED} $dbname not exist${ENDCOLOR}"
+			read -p "please enter name of again : " dbname
 		else
 		flag=1
 		 # cd "$path"/$dbname
