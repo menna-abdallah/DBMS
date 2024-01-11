@@ -3,6 +3,13 @@
 shopt -s extglob
 LC_COLLATE=C
 
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 path=`pwd`
 export $dbname
 function select_datatype(){
@@ -24,7 +31,7 @@ do
 		break
 		;;
 	*)
-		echo "invalid data type, enter correct choice: "
+		echo -e "${YELLOW}invalid data type, enter correct choice: ${ENDCOLOR}"
 		esac
 done
 done
@@ -46,7 +53,8 @@ do
 	do
 		if [[ $field_name == "" ]]
 		then
-			read -p "field name can't be empty, please enter valid name :  " field_name
+			echo -e "${RED}field name can't be empty${ENDCOLOR}"
+			read -p  "please enter valid name :  " field_name
 
 		elif [[ $field_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 		then
@@ -60,7 +68,8 @@ do
 			flagf=0
 			fi
 		else
-			read -p "this isn't valid name, please enter name again :  "  field_name
+			echo -e "${RED}This isn't valid name ${ENDCOLOR}"
+			read -p "please enter name again :  "  field_name
 		fi
 	done
 
@@ -90,25 +99,27 @@ done
 
 }
 
-read -p  "enter number of tables :  "  table_num
+read -p  "Enter number of tables :  "  table_num
 typeset -i var=0
 while ! [[ $table_num =~ ^[0-9]+([.][0-9]+)?$ ]]
 do
-read -p  "please enter valid number:  "  table_num
+read -p  "Please enter valid number:  "  table_num
 done
 while [ $var -lt $table_num ]
 do
 	answer=""
-	read -p  "enter name of table number of $(( $var + 1 )):  "  table_name
+	read -p  "Enter name of table number of $(( $var + 1 )):  "  table_name
 	typeset -i flag=1
 	while [ $flag -eq 1 ]
 	do
 		if [[ $table_name == "" ]]
 		then
-			read -p "tabel name can't be empty , please enter valid name: " table_name
+		echo -e "${RED}Tabel name can't be empty${ENDCOLOR}"
+			read -p "Please enter valid name: " table_name
 		elif [[ -e $table_name ]]
 		then 
-			read -p "table already exist, please enter name : " table_name
+			echo -e "${YELLOW}Table already exist${ENDCOLOR}"
+			read -p "Please enter name : " table_name
 		elif [[ $table_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 		then
 			if [[ $table_name =~ [[:space:]] ]]
@@ -117,26 +128,27 @@ do
 				touch "$path"/MyDBMS/$table_name
 				touch "$path/MyDBMS/$dbname/$table_name.metadata"
 				create_fields
-				echo "your table name is $table_name"
-				echo "tabel created successfully" 
+				echo "${GREEN}your table name is ${BLUE}$table_name${ENDCOLOR}"
+				echo "${GREEN}tabel created successfully${ENDCOLOR}" 
 				flag=0
 			else
 				touch "$path/MyDBMS/$dbname/$table_name"
 				touch "$path/MyDBMS/$dbname/$table_name.metadata"
 				create_fields
-				echo "-------------------------tabel created successfully----------------------------"
+				echo "${GREEN}-------------------------tabel created successfully----------------------------${ENDCOLOR}"
 				flag=0
 			fi		
 		else
-			read -p "this isn't valid name, please enter name again :  "  table_name
+			echo -e "${RED}This isn't valid name${ENDCOLOR}"
+			read -p "please enter name again :  "  table_name
 		fi
 	done
 
 	((var++))
 
 done
-				echo "####tabels in your database $dbname are : " 
+				echo "${BLUE}####tabels in your database $dbname are : ${ENDCOLOR}" 
 				ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-				echo  -n "to connect another schema, "
+				echo  -n "${BLUE}to connect another schema, ${ENDCOLOR}"
 				source ./connect_DB.sh
 #source ../../connect_DB.sh
