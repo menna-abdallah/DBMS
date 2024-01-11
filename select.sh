@@ -3,6 +3,13 @@
 shopt -s extglob 
 export LC_COLLATE=C
 
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 path=`pwd`
 export $dbname
 echo "tabels in your database are :"
@@ -12,9 +19,9 @@ typeset -i num=0
 function checkdata(){
 	if [ "$num" -eq 0 ]
 				then
-					echo "------------------There is no data in the table yet!!!------------------"
+					echo -e "${BLUE}------------------There is no data in the table yet!!!------------------${ENDCOLOR}"
 				else
-					echo "------------------Selected Data----------------------------"
+					echo -e "${BLUE}------------------Selected Data----------------------------${ENDCOLOR}"
 					cat "$path/MyDBMS/$dbname/temp"
 				fi
 }
@@ -102,7 +109,7 @@ read -p "please enter tabel name:  " tabel_name
 								break
 								;;
 								*)
-								echo "invalid choice"
+								echo -e "${RED}invalid choice${ENDCOLOR}"
 								;;
 						esac
 						break;
@@ -124,14 +131,15 @@ read -p "please enter tabel name:  " tabel_name
 		break;
 	done
 	else 
-		read -p "table not exist, please enter correct name: " tabel_name
+		echo -e "${YELLOW}Table not exist${ENDCOLOR}" 
+		read -p "please enter correct name: " tabel_name
 	fi
 done
 if [ -e "$path/MyDBMS/$dbname/temp" ]
 then
 rm "$path/MyDBMS/$dbname/temp"
 fi
-echo "------------------tables in schema $dbname are------------------------------"
+echo -e "${BLUE}------------------tables in schema $dbname are------------------------------${ENDCOLOR}"
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
 echo  -n "************to connect another schema, "
 source ./connect_DB.sh

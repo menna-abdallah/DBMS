@@ -2,6 +2,14 @@
 
 shopt -s extglob
 export LC_COLLATE=C
+
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 export $dbname
 path=`pwd`
 
@@ -30,7 +38,8 @@ function checktype() {
 		then
 			if [[ $field_value == "" ]]
 			then
-				read -p "primary key can't be null, please enter value : " field_value
+				echo -e "${RED}primary key can't be null${ENDCOLOR}" 
+				read -p "please enter value : " field_value
 			else
 			check=`cut -d":" -f$i "$path/MyDBMS/$dbname/$tabel_name" |  awk -F:  -v field_value="$field_value"  'BEGIN{flag=0}{ if( $i==field_value ){flag=1; exit}} END{print flag}' `
 			fi	
@@ -67,13 +76,13 @@ function checktype() {
 			done
 			# end check data type
 		else 
-			read -p "value isn't unique, please enter uniq value : " field_value	
+			echo -e "${YELLOW}value isn't unique${ENDCOLOR}" 
+			read -p "please enter uniq value : " field_value	
 		fi
 	done
 }
 
-
-echo "tabels in your database are:" 
+echo -e "${BLUE}tabels in your database are:${ENDCOLOR}" 
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
 read -p "select  name of tabel you want to insert into:  "  tabel_name
 flag_tabel=0
@@ -81,12 +90,13 @@ while [ $flag_tabel = 0 ]
 do
 	if [[ $tabel_name == "" ]]
 	then
-			read -p "tabel name is empty , please enter name again: " tabel_name
+			echo -e "${YELLOW}Tabel name is empty${ENDCOLOR}"
+			read -p "please enter name again: " tabel_name
 	elif [ ! -e "$path/MyDBMS/$dbname/$tabel_name" ]
 	then 
-		read -p  "tabel not exist, please enter name again :  " tabel_name
+		echo -e "${YELLOW}Tabel not exist${ENDCOLOR}"
+		read -p "please enter name again :  " tabel_name
 	else 
-		echo "enter imsert"
 		flag_tabel=1
 		typeset -i i=1
 		fields=$(cut -d':' -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata")
@@ -99,11 +109,11 @@ do
 
 		#echo -n "$field_value:" >> "$tabel_name"  # Append each value on a new line
 		done
-		echo "------------------recored inserted successfully--------------------------------"
+		echo -e "${GREEN}------------------recored inserted successfully--------------------------------${ENDCOLOR}"
 	
 	fi
 done
-echo "------------------tables in schema $dbname are------------------------------"
+echo -e "${BLUE}------------------tables in schema $dbname are------------------------------${ENDCOLOR}"
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
 echo  -n "************to connect another schema, "
 source ./connect_DB.sh

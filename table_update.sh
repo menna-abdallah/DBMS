@@ -2,6 +2,14 @@
 
 shopt -s extglob
 LC_COLLATE=C
+
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 export $dbname
 path=`pwd`
 
@@ -12,7 +20,7 @@ read -p "Enter the name of table you want to update: " tname
 #CHECK EXITANCE
 if [ ! -f "$path/MyDBMS/$dbname/$tname" ];
 then
-	echo "There is no table with that name"
+	echo -e "${YELLOW}There is no table with that name${ENDCOLOR}"
 else
 		
 	echo "choose the condition colum:"
@@ -30,7 +38,7 @@ else
 		if awk -F: -v value="$value" -v field_no="$field_no" '$field_no == value { found=1; exit } END { if (found != 1) exit 1 }' "$path/MyDBMS/$dbname/$tname"; then
 			break  # Value found
 		else
-			echo "There is no such value. Please enter another one."
+			echo "${YELLOW}There is no such value. Please enter another one.${ENDCOLOR}"
 		fi
 	done
 
@@ -52,7 +60,8 @@ else
 		strTest=0
 
 		if [[ $PK =~ [yY] && $value2 == "" ]]; then
-			read -p "Primary key cannot be null. Enter again: " value2
+			echo -e "${RED}Primary key cannot be null.${ENDCOLOR}" 
+			read -p "Enter again: " value2
 		else
 			pkTest=1
 		fi
@@ -61,7 +70,8 @@ else
 		then
 			if awk -v col="$field_no" -F: '{print $col}' "$path/MyDBMS/$dbname/$tname" | grep -q "^$value2$"; 
 			then
-				read -p "This value isn't unique: " value2
+				echo -e "${YELLOW}This value isn't unique: ${ENDCOLOR}" 
+				read value2
 			else
 				pkTest=1
 			fi
@@ -71,15 +81,17 @@ else
 			if [[ $value2 =~ ^[0-9]+$ ]]; then
 				intTest=1
 			else
-				read -p "This is not an integer value. Enter again: " value2
+				echo -e  "${YELLOW}This is not an integer value. Enter again: ${ENDCOLOR}" 
+				read value2
 				continue  # Continue to the next iteration of the loop
 			fi
 		elif [[ $col_DataType == "string" ]]; then
 			if [[ $value2 =~ ^[a-zA-Z_][a-zA-Z0-9_\"[:space:]]*$ || $value2 =~ ^[0][0-9]*$ ]]; then
 				strTest=1
 			else
-				read -p "This is not a string value. Enter again: " value2
-			fi
+				echo -e  "${YELLOW}This is not a string value. Enter again: ${ENDCOLOR}" 
+				read value2			
+				fi
 		fi
 		break
 	done
@@ -95,11 +107,11 @@ else
 				print $0;
 				}' "$path/MyDBMS/$dbname/$tname" > temptable
 				mv temptable "$path/MyDBMS/$dbname/$tname"
-				echo "Updated Successfully"
-				echo "-----------------------Table after updated-----------------------"
+				echo "${GREEN}Updated Successfully${ENDCOLOR}"
+				echo -e "${BLUE}-----------------------Table after updated-----------------------${ENDCOLOR}"
 				cat "$path/MyDBMS/$dbname/$tname"
 	else
-				echo "invalid"
+				echo -e "${RED}invalid${ENDCOLOR}"
 	fi	
 	
 fi

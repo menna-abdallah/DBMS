@@ -3,6 +3,13 @@
 shopt -s extglob
 export LC_COLLATE=C
 
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 # get the current path
 path=`pwd`
 
@@ -15,19 +22,20 @@ select del_choice in "Delete all DataBases" "Delete a specific DataBase" "EXIT"
 do
 	case $del_choice in
 		"Delete all DataBases")
-			echo "Worrinng You are going to delete all your DataBase"
-			read -p "press y to continue or n to quite: " confirm
+			echo -e "${YELLOW}Worrinng You are going to delete all your DataBase${ENDCOLOR}"
+			echo -e " ${YELLOW}press y to continue or n to quite: ${ENDCOLOR}" 
+			read confirm
 			if [ $confirm = 'y' -o $confirm = 'Y' ];
 			then
 				if (( db_no == 0));
 				then 
-					echo " There is no DataBase yet!!"
+					echo -e "${RED}There is no DataBase yet!!${ENDCOLOR}"
 				else
 					for _db in `ls "$path"/MyDBMS`
 					do
 						rm -r "$path"/MyDBMS/$_db
 					done
-					echo "All DataBase are deleted"
+					echo -e "${GREEN}All DataBase are deleted${ENDCOLOR}"
 				fi
 			else
 				exit
@@ -37,7 +45,7 @@ do
 		"Delete a specific DataBase")
 			if ((db_no == 0));
 			then
-				echo "There is no DataBase"
+				echo -e "${YELLOW}There is no DataBase${ENDCOLOR}"
 				break
 			else
 				ls "$path/MyDBMS"
@@ -46,14 +54,15 @@ do
 			#Check Exitance
 			if [ ! -d "$path"/MyDBMS/$dbname ];
 			then
-				echo " there is no DataBase with the name of $dbname"
+				echo -e "${YELLOW}There is no DataBase with the name of $dbname${ENDCOLOR}"
 			else
-				echo "Worrinng You are going to delete $dbname"
-				read -p "press y to continue or n to quite: " confirm
-				if [ $confirm = 'y' -o $confirm = 'Y' ];
+				echo -e "${YELLOW}Worrinng You are going to delete $dbname${ENDCOLOR}"
+				echo -e " ${YELLOW}press y to continue or n to quite: ${ENDCOLOR}" 
+				read confirm				
+			if [ $confirm = 'y' -o $confirm = 'Y' ];
 				then
 					rm -r "$path"/MyDBMS/$dbname
-					echo "$dbname removed Successfully"
+					echo -e "${GREEN}$dbname removed Successfully${ENDCOLOR}"
 					ls "$path/MyDBMS"
 				else
 					exit
@@ -65,6 +74,11 @@ do
 			 source ./DB.sh
 			 ;;
 			 *)
-			 echo "Please, Enter a suitable choice"
+			 echo -e "${RED}Please, Enter a suitable choice${ENDCOLOR}"
 	 esac
  done
+
+
+				ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
+				echo  -n "to connect another schema, "
+				source ./connect_DB.sh

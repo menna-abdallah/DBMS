@@ -2,26 +2,35 @@
 
 shopt -s extglob
 LC_COLLATE=C
+
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+LIGHTBLUE="\e[94m"
+ENDCOLOR="\e[0m"
+
 export $dbname
 path=$(pwd)
 ls "$path/MyDBMS/$dbname" | grep -v '.metadata'
-read -p " Enter the name of table you want to delete its data: " tname
+read -p "Enter the name of table you want to delete its data: " tname
 
 #CHECK EXITANCE
 if [ ! -f "$path/MyDBMS/$dbname/$tname" ];
 then
-	echo " There is no table with that name"
+	echo "${RED}There is no table with that name${ENDCOLOR}"
 else
 	select del_choice in "Delete all Data" "Delete Rows" "Delete Colums" "EXIT"
 	do
 		case $del_choice in
 			"Delete all Data")
-				echo "Worrinng You are going to delete $tname"
-				read -p "press y to continue or n to quite: " confirm
+				echo "${YELLOW}Worrinng You are going to delete $tname${ENDCOLOR}"
+				echo -e "${BLUE}press y to continue or n to quite: ${ENDCOLOR}" 
+				read confirm
 				if [ $confirm = 'y' -o $confirm = 'Y' ];
 				then
 					echo " " > "$path/MyDBMS/$dbname/$tname"
-					echo "Data Deleted Successfully"
+					echo -e "${GREEN}Data Deleted Successfully${ENDCOLOR}"
 				else
 					exit
 				fi		
@@ -36,7 +45,7 @@ else
 				read -p "Enter value you want to delete:  " value
 				if [  `grep -F "$value" "$path/MyDBMS/$dbname/$tname" | wc -w` -eq 0 ];
 				then
-					echo "there is no such value"	
+					echo -e "${YELLOW}There is no such value${ENDCOLOR}"	
 				else
 					if [[ $value =~ ^[0-9]*$ ]];
 					then	
@@ -72,7 +81,7 @@ else
 										exit
 									;;
 									*)
-										echo "not valid"
+										echo -e "${RED}Not valid${ENDCOLOR}"
 									;;
 								esac	
 							done
@@ -98,7 +107,7 @@ else
 					
 				if [[ $PK == "y"  || $PK == "Y" ]];
 				then
-					echo " you can not delete a primary key"
+					echo -e "${YELLOW}you can not delete a primary key${ENDCOLOR}"
 				else			                        
 					cut -d: -f"$field_no" --complement "$path/MyDBMS/$dbname/$tname" >> "$path/MyDBMS/$dbname/temp" 
 					rm "$path/MyDBMS/$dbname/$tname"
@@ -110,7 +119,7 @@ else
 				exit
 			;;
 			*)
-				echo "invalid choice"
+				echo -e "${RED}Invalid choice${ENDCOLOR}"
 			;;
 		esac
 	done
