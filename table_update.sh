@@ -15,7 +15,8 @@ path=`pwd`
 
 ls "$path/MyDBMS/$dbname" | grep -v '.metadata'
 
-read -p "Enter the name of table you want to update: " tname
+echo -e "${LIGHTBLUE}Enter the name of table you want to update: ${ENDCOLOR}" 
+read tname
 
 #CHECK EXITANCE
 if [ ! -f "$path/MyDBMS/$dbname/$tname" ];
@@ -23,7 +24,7 @@ then
 	echo -e "${YELLOW}There is no table with that name${ENDCOLOR}"
 else
 		
-	echo "choose the condition colum:"
+	echo -e "${LIGHTBLUE}choose the condition colum: ${ENDCOLOR}"
 	select opt in $(cut -d":" -f1 "$path/MyDBMS/$dbname/$tname.metadata")
 	do
     	field_no=$REPLY
@@ -32,17 +33,19 @@ else
 
 	while true
 	do
-		read -p "Enter the value you want to update: " value
+		echo -e "${LIGHTBLUE}Enter the value you want to update: ${ENDCOLOR}" 
+		read value
 
 		# Check if the value exists in the specified column
 		if awk -F: -v value="$value" -v field_no="$field_no" '$field_no == value { found=1; exit } END { if (found != 1) exit 1 }' "$path/MyDBMS/$dbname/$tname"; then
 			break  # Value found
 		else
-			echo "${YELLOW}There is no such value. Please enter another one.${ENDCOLOR}"
+			echo -e "${BLUE}There is no such value. Please enter another one.${ENDCOLOR}"
 		fi
 	done
 
-	read -p "Enter new value: " value2
+	echo -e "${LIGHTBLUE}Enter new value: ${ENDCOLOR}" 
+	read value2
 	
 	col_DataType=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $2}}' "$path/MyDBMS/$dbname/$tname.metadata")
 	PK=$(awk -F: -v field_no="$field_no" '{if ( NR == field_no) {print $3}}' "$path/MyDBMS/$dbname/$tname.metadata")
@@ -61,7 +64,8 @@ else
 
 		if [[ $PK =~ [yY] && $value2 == "" ]]; then
 			echo -e "${RED}Primary key cannot be null.${ENDCOLOR}" 
-			read -p "Enter again: " value2
+			echo -e "${BLUE}Enter again: ${ENDCOLOR}" 
+			read value2
 		else
 			pkTest=1
 		fi
@@ -81,7 +85,8 @@ else
 			if [[ $value2 =~ ^[0-9]+$ ]]; then
 				intTest=1
 			else
-				echo -e  "${YELLOW}This is not an integer value. Enter again: ${ENDCOLOR}" 
+				echo -e  "${YELLOW}This is not an integer value ${ENDCOLOR}" 
+				echo -e "${BLUE}Enter again: ${ENDCOLOR}" 
 				read value2
 				continue  # Continue to the next iteration of the loop
 			fi
@@ -89,7 +94,8 @@ else
 			if [[ $value2 =~ ^[a-zA-Z_][a-zA-Z0-9_\"[:space:]]*$ || $value2 =~ ^[0][0-9]*$ ]]; then
 				strTest=1
 			else
-				echo -e  "${YELLOW}This is not a string value. Enter again: ${ENDCOLOR}" 
+				echo -e  "${YELLOW}This is not a string value.${ENDCOLOR}"
+				echo -e "${BLUE}Enter again: ${ENDCOLOR}" 
 				read value2			
 				fi
 		fi
@@ -107,7 +113,7 @@ else
 				print $0;
 				}' "$path/MyDBMS/$dbname/$tname" > temptable
 				mv temptable "$path/MyDBMS/$dbname/$tname"
-				echo "${GREEN}Updated Successfully${ENDCOLOR}"
+				echo -e "${GREEN}Updated Successfully${ENDCOLOR}"
 				echo -e "${BLUE}-----------------------Table after updated-----------------------${ENDCOLOR}"
 				cat "$path/MyDBMS/$dbname/$tname"
 	else
@@ -116,9 +122,7 @@ else
 	
 fi
  
-
-				ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-				echo  -n "to connect another schema, "
+				echo  -n "*******************to connect another schema, "
 				source ./connect_DB.sh
 		
 		

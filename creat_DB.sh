@@ -13,7 +13,8 @@ ENDCOLOR="\e[0m"
 #TILL VALID NAME
 while true
 do
- read -p "Enter DataBase Name: " DBNAME
+ echo -e "${LIGHTBLUE}Enter DataBase Name: ${ENDCOLOR}" 
+ read DBNAME
 
 #CHECK EXITANCE
 if [ -z "$DBNAME" ];
@@ -39,7 +40,6 @@ then
          echo -e "${GREEN}$DBNAME DataBase created successfully${ENDCOLOR}"
          break
 else
-	 echo "Valid Name"
 	 mkdir "$(pwd)/MyDBMS"/$DBNAME
      echo -e "${GREEN}$DBNAME DataBase created successfully${ENDCOLOR}"
 	 break

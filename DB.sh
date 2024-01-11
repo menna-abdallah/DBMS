@@ -31,7 +31,7 @@ do
 			source ./creat_DB.sh
   	;;
 	"List Your DataBase")
-			echo -e "${LIGHTBLUE}DataBase schemas are : ${ENDCOLOR}"
+			echo -e "${BLUE}DataBase schemas are : ${ENDCOLOR}"
 			ls "$path/MyDBMS" 
   	;;
 

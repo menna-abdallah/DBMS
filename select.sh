@@ -19,7 +19,7 @@ typeset -i num=0
 function checkdata(){
 	if [ "$num" -eq 0 ]
 				then
-					echo -e "${BLUE}------------------There is no data in the table yet!!!------------------${ENDCOLOR}"
+					echo -e "${YELLOW}------------------There is no data in the table yet!!!------------------${ENDCOLOR}"
 				else
 					echo -e "${BLUE}------------------Selected Data----------------------------${ENDCOLOR}"
 					cat "$path/MyDBMS/$dbname/temp"
@@ -32,7 +32,8 @@ do
 #check existance of tabel 
 if [[ $tabel_name = "" ]]
 then 
-read -p "please enter tabel name:  " tabel_name  
+echo -e "${LIGHTBLUE}please enter tabel name:  ${ENDCOLOR}" 
+read tabel_name  
    elif [ -e "$path/MyDBMS/$dbname/$tabel_name" ]
 	then
 	flag=0	
@@ -47,11 +48,12 @@ read -p "please enter tabel name:  " tabel_name
 				;;
 			"select record")
 				#cut -d":" -f1  "$tabel_name.metadata" | nl -w1
-				echo "select one attribute to build your condition on:"
+				echo -e "${LIGHTBLUE}Select one attribute to build your condition on: ${ENDCOLOR}"
 				select opt in `cut -d":" -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata"`
 				do
 					replay=$REPLY	
-					read -p "Enter value you want to select:  " value 
+					echo -e "${LIGHTBLUE}Enter value you want to select:  ${ENDCOLOR}" 
+					read value 
 					select choice in "greater than"   "less than"   "greater than or equal"  "less than or equal"  "equal"
 					do
 						case $choice in 
@@ -118,7 +120,7 @@ read -p "please enter tabel name:  " tabel_name
 				done
 				;;
 			"select column")	
-				echo "please enter the number column you want to retrieve: " 
+				echo -e "${LIGHTBLUE}please enter the number column you want to retrieve: ${ENDCOLOR}" 
 			select opt in `cut -d":" -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata"`
 				do
 					replay=$REPLY	
@@ -132,7 +134,8 @@ read -p "please enter tabel name:  " tabel_name
 	done
 	else 
 		echo -e "${YELLOW}Table not exist${ENDCOLOR}" 
-		read -p "please enter correct name: " tabel_name
+		echo -e "${BLUE}please enter correct name: ${ENDCOLOR}" 
+		read tabel_name
 	fi
 done
 if [ -e "$path/MyDBMS/$dbname/temp" ]

@@ -39,7 +39,8 @@ function checktype() {
 			if [[ $field_value == "" ]]
 			then
 				echo -e "${RED}primary key can't be null${ENDCOLOR}" 
-				read -p "please enter value : " field_value
+				echo -e "${BLUE}please enter value : ${ENDCOLOR}" 
+				read field_value
 			else
 			check=`cut -d":" -f$i "$path/MyDBMS/$dbname/$tabel_name" |  awk -F:  -v field_value="$field_value"  'BEGIN{flag=0}{ if( $i==field_value ){flag=1; exit}} END{print flag}' `
 			fi	
@@ -58,7 +59,8 @@ function checktype() {
 						flagtype=1
 						append
 					else
-						read -p "please enter string value :  " field_value
+						echo -e "${LIGHTBLUE}please enter string value :  ${endcolor}" 
+						read field_value
 					fi
 					# end validation
 				else
@@ -69,7 +71,8 @@ function checktype() {
 						flagtype=1
 						append
 					else
-						read -p  "please enter int value :  " field_value
+						echo -e  "${LIGHTBLUE}please enter int value :  ${ENDCOLOR}" 
+						read field_value
 					fi
 						# end validation
 				fi
@@ -77,26 +80,29 @@ function checktype() {
 			# end check data type
 		else 
 			echo -e "${YELLOW}value isn't unique${ENDCOLOR}" 
-			read -p "please enter uniq value : " field_value	
+			echo -e "${LIGHTBLUE}please enter uniq value : ${ENDCOLOR}" 
+			read field_value	
 		fi
 	done
 }
 
 echo -e "${BLUE}tabels in your database are:${ENDCOLOR}" 
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-read -p "select  name of tabel you want to insert into:  "  tabel_name
+echo -e "${LIGHTBLUE}select  name of tabel you want to insert into: ${ENDCOLOR}"  
+read tabel_name
 flag_tabel=0
 while [ $flag_tabel = 0 ]
 do
 	if [[ $tabel_name == "" ]]
 	then
-			echo -e "${YELLOW}Tabel name is empty${ENDCOLOR}"
-			read -p "please enter name again: " tabel_name
+			echo -e "${RED}Tabel name is empty${ENDCOLOR}"
+			echo -e "${BLUE}please enter name again: ${ENDCOLOR}" 
+			read tabel_name
 	elif [ ! -e "$path/MyDBMS/$dbname/$tabel_name" ]
 	then 
 		echo -e "${YELLOW}Tabel not exist${ENDCOLOR}"
-		read -p "please enter name again :  " tabel_name
-	else 
+		echo -e "${BLUE}please enter name again: ${ENDCOLOR}" 
+		read tabel_name	else 
 		flag_tabel=1
 		typeset -i i=1
 		fields=$(cut -d':' -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata")
@@ -104,16 +110,17 @@ do
 		columns=` cat "$path/MyDBMS/$dbname/$tabel_name.metadata" | wc -l `
 		for (( i=1 ; i<=$columns ; i++));
 		do
-			read -p "Enter `sed -n "${i}p" "$path/MyDBMS/$dbname/$tabel_name.metadata" | cut -d":" -f1 `:  " field_value 
+			echo -e "${LIGHTBLUE}Enter `sed -n "${i}p" "$path/MyDBMS/$dbname/$tabel_name.metadata" | cut -d":" -f1 `:  ${ENDCOLOR}" 
+			read field_value 
 			checktype
 
 		#echo -n "$field_value:" >> "$tabel_name"  # Append each value on a new line
 		done
-		echo -e "${GREEN}------------------recored inserted successfully--------------------------------${ENDCOLOR}"
+		echo -e "${GREEN}------------------Recored inserted successfully--------------------------------${ENDCOLOR}"
 	
 	fi
 done
-echo -e "${BLUE}------------------tables in schema $dbname are------------------------------${ENDCOLOR}"
+echo -e "${BLUE}------------------Tables in schema $dbname are------------------------------${ENDCOLOR}"
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
 echo  -n "************to connect another schema, "
 source ./connect_DB.sh

@@ -23,7 +23,7 @@ do
 			;;
 		"insert")
 			source  ./insert.sh
-			echo " To insert new record enter 3 or Enter 7 to Exit"
+			echo -e "${BLUE}To insert new record enter 3 or Enter 7 to Exit${ENDCOLOR}"
 			;;
 		"update")
 			source ./table_update.sh
@@ -39,7 +39,7 @@ do
 			source ./DB.sh
 			;;
 		*)
-			echo "not valid option"
+			echo -e "${RED}Not valid option${ENDCOLOR}"
 			;;
 		esac
 	done
@@ -54,17 +54,20 @@ else
 echo -e "${BLUE}your schemas are : ${ENDCOLOR}" 
 ls "$path/MyDBMS"
  
-	read -p "Enter DataBase Name: " dbname
+	echo -e "${LIGHTBLUE}Enter DataBase Name: ${ENDCOLOR}" 
+	read dbname
 	flag=0
 	while [ $flag -eq 0 ]
 	do
 		if [[ -z $dbname ]]
 		then 
-		read -p "please enter DataBase Name: "  dbname
+		echo -e "${BLUE}Please, Enter DataBase Name: ${ENDCOLOR}" 
+		read dbname
 		elif [ ! -d "$path"/MyDBMS/$dbname ];
 		then
 			echo -e "${RED} $dbname not exist${ENDCOLOR}"
-			read -p "please enter name of again : " dbname
+		echo -e "${BLUE}Please, Enter DataBase Name again: ${ENDCOLOR}" 
+		read dbname		
 		else
 		flag=1
 		 # cd "$path"/$dbname

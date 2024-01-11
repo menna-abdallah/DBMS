@@ -16,7 +16,7 @@ function select_datatype(){
 typeset -i flagtype=0;
 while [ $flagtype -eq 0 ]
 do
-echo "select  Datatype of filed:" 
+echo -e "${LIGHTBLUE}select  Datatype of filed: ${ENDCOLOR}" 
 select option in int  string
 do
 	case $option in
@@ -31,7 +31,7 @@ do
 		break
 		;;
 	*)
-		echo -e "${YELLOW}invalid data type, enter correct choice: ${ENDCOLOR}"
+		echo -e "${BLUE}invalid data type, enter correct choice: ${ENDCOLOR}"
 		esac
 done
 done
@@ -39,22 +39,26 @@ done
 
 function create_fields(){
 	
-read -p  "enter number of fields :  "  field_num
+echo -e "${LIGHTBLUE}Enter number of fields :  ${ENDCOLOR}"  
+read field_num
 typeset -i i=1
 while ! [[ $field_num =~ ^[0-9]+([.][0-9]+)?$ ]]
 do
-read -p  "please enter valid number:  "  field_num
+echo -e "${BLUE}Invalid value, enter valid number:  ${ENDCOLOR}"  
+read field_num
 done
 while [ $i -le $field_num ]
 do
 	typeset -i flagf=1
-	read -p  "enter name of field $i  :  "  field_name
+	echo -e "${LIGHTBLUE}Enter name of field $i  :  ${ENDCOLOR}"  
+	read field_name
 	while [ $flagf -eq 1 ]
 	do
 		if [[ $field_name == "" ]]
 		then
 			echo -e "${RED}field name can't be empty${ENDCOLOR}"
-			read -p  "please enter valid name :  " field_name
+			echo -e "${BLUE}Invalid value , enter valid name :  ${ENDCOLOR}" 
+			read field_name
 
 		elif [[ $field_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 		then
@@ -69,7 +73,8 @@ do
 			fi
 		else
 			echo -e "${RED}This isn't valid name ${ENDCOLOR}"
-			read -p "please enter name again :  "  field_name
+			echo -e "${BLUE}Enter name again :  ${ENDCOLOR}"  
+			read field_name
 		fi
 	done
 
@@ -78,7 +83,8 @@ do
 		select_datatype	
 	else
 		select_datatype
-		read -p  "Is it primary key?(Y/N) :  "  answer
+		echo -e "${LIGHTBLUE}Is it primary key?(Y/N) :  ${ENDCOLOR}"  
+		read answer
 	fi
 	export ${field_name}
 	export ${field_type}
@@ -99,27 +105,32 @@ done
 
 }
 
-read -p  "Enter number of tables :  "  table_num
+echo -e "${LIGHTBLUE}Enter number of tables :  ${ENDCOLOR}"  
+read table_num
 typeset -i var=0
 while ! [[ $table_num =~ ^[0-9]+([.][0-9]+)?$ ]]
 do
-read -p  "Please enter valid number:  "  table_num
+echo -e "${BLUE}Please enter valid number:  ${ENDCOLOR}"  
+read table_num
 done
 while [ $var -lt $table_num ]
 do
 	answer=""
-	read -p  "Enter name of table number of $(( $var + 1 )):  "  table_name
+	echo -e "${LIGHTBLUE}Enter name of table $(( $var + 1 )):  ${ENDCOLOR}"  
+	read table_name
 	typeset -i flag=1
 	while [ $flag -eq 1 ]
 	do
 		if [[ $table_name == "" ]]
 		then
 		echo -e "${RED}Tabel name can't be empty${ENDCOLOR}"
-			read -p "Please enter valid name: " table_name
+			echo -e "${BLUE}Please enter valid name: ${ENDCOLOR}" 
+			read table_name
 		elif [[ -e $table_name ]]
 		then 
 			echo -e "${YELLOW}Table already exist${ENDCOLOR}"
-			read -p "Please enter name : " table_name
+			echo -e "${BLUE}Please enter name : ${ENDCOLOR}" 
+			read table_name
 		elif [[ $table_name =~ ^[a-zA-Z_][a-zA-Z0-9_" "]*$ ]] ;
 		then
 			if [[ $table_name =~ [[:space:]] ]]
@@ -128,27 +139,28 @@ do
 				touch "$path"/MyDBMS/$table_name
 				touch "$path/MyDBMS/$dbname/$table_name.metadata"
 				create_fields
-				echo "${GREEN}your table name is ${BLUE}$table_name${ENDCOLOR}"
-				echo "${GREEN}tabel created successfully${ENDCOLOR}" 
+				echo -e "${GREEN}your table name is ${BLUE}$table_name${ENDCOLOR}"
+				echo -e "${GREEN}tabel created successfully${ENDCOLOR}" 
 				flag=0
 			else
 				touch "$path/MyDBMS/$dbname/$table_name"
 				touch "$path/MyDBMS/$dbname/$table_name.metadata"
 				create_fields
-				echo "${GREEN}-------------------------tabel created successfully----------------------------${ENDCOLOR}"
+				echo -e "${GREEN}-------------------------tabel created successfully----------------------------${ENDCOLOR}"
 				flag=0
 			fi		
 		else
 			echo -e "${RED}This isn't valid name${ENDCOLOR}"
-			read -p "please enter name again :  "  table_name
+			echo -e "${BLUE} enter name again :  ${ENDCOLOR}"  
+			read table_name
 		fi
 	done
 
 	((var++))
 
 done
-				echo "${BLUE}####tabels in your database $dbname are : ${ENDCOLOR}" 
+				echo -e "${BLUE}####Tabels in your database $dbname are : ${ENDCOLOR}" 
 				ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-				echo  -n "${BLUE}to connect another schema, ${ENDCOLOR}"
+				echo  -n "*********to connect another schema"
 				source ./connect_DB.sh
 #source ../../connect_DB.sh

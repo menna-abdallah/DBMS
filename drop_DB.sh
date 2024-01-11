@@ -15,7 +15,7 @@ path=`pwd`
 
 ls "$path"/MyDBMS
 
-echo "please enter your choice or enter 3 to Exit "
+echo "Please enter your choice or enter 3 to Exit "
 declare -i db_no=`ls "$path"/MyDBMS | wc -w`
 
 select del_choice in "Delete all DataBases" "Delete a specific DataBase" "EXIT"
@@ -49,7 +49,8 @@ do
 				break
 			else
 				ls "$path/MyDBMS"
-				read -p "Enter the name of DataBase: " dbname
+				echo -e "${LIGHTBLUE}Enter the name of DataBase: ${ENDCOLOR}" 
+				read dbname
 			fi
 			#Check Exitance
 			if [ ! -d "$path"/MyDBMS/$dbname ];
@@ -80,5 +81,5 @@ do
 
 
 				ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-				echo  -n "to connect another schema, "
+				echo  -n "*************to connect another schema, "
 				source ./connect_DB.sh

@@ -13,19 +13,20 @@ ENDCOLOR="\e[0m"
 export $dbname
 path=$(pwd)
 ls "$path/MyDBMS/$dbname" | grep -v '.metadata'
-read -p "Enter the name of table you want to delete its data: " tname
+echo -e "${LIGHTBLUE}Enter the name of table you want to delete its data:  ${ENDCOLOR}" 
+read tname
 
 #CHECK EXITANCE
 if [ ! -f "$path/MyDBMS/$dbname/$tname" ];
 then
-	echo "${RED}There is no table with that name${ENDCOLOR}"
+	echo "${YELLOW}There is no table with that name${ENDCOLOR}"
 else
 	select del_choice in "Delete all Data" "Delete Rows" "Delete Colums" "EXIT"
 	do
 		case $del_choice in
 			"Delete all Data")
 				echo "${YELLOW}Worrinng You are going to delete $tname${ENDCOLOR}"
-				echo -e "${BLUE}press y to continue or n to quite: ${ENDCOLOR}" 
+				echo -e "${YELLOW}press y to continue or n to quite: ${ENDCOLOR}" 
 				read confirm
 				if [ $confirm = 'y' -o $confirm = 'Y' ];
 				then
@@ -42,7 +43,8 @@ else
 					field_no=$REPLY
 					break
 				done	
-				read -p "Enter value you want to delete:  " value
+				echo -e "${LIGHTBLUE}Enter value you want to delete:  ${ENDCOLOR}" 
+				read value
 				if [  `grep -F "$value" "$path/MyDBMS/$dbname/$tname" | wc -w` -eq 0 ];
 				then
 					echo -e "${YELLOW}There is no such value${ENDCOLOR}"	
@@ -96,7 +98,7 @@ else
 				fi
 			;;
 			"Delete Colums")
-				echo "choose the condition colum:"
+				echo -e "${LIGHTBLUE}choose the condition colum: ${ENDCOLOR}"
 				select opt in $(cut -d":" -f1 "$path/MyDBMS/$dbname/$tname.metadata")
 				do
 					field_no=$REPLY
@@ -126,7 +128,7 @@ else
 fi
 
 ls "$path/MyDBMS/$dbname" | grep -v '\.metadata$'
-echo  -n "to connect another schema, "
+echo  -n "***************to connect another schema, "
 source ./connect_DB.sh
 
 
