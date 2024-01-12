@@ -22,7 +22,7 @@ function checkdata(){
 					echo -e "${YELLOW}------------------There is no data in the table yet!!!------------------${ENDCOLOR}"
 				else
 					echo -e "${BLUE}------------------Selected Data----------------------------${ENDCOLOR}"
-					cat "$path/MyDBMS/$dbname/temp"
+					cat "$path/MyDBMS/$dbname/$tabel_name"
 				fi
 }
 typeset -i count=1
@@ -64,7 +64,7 @@ read tabel_name
 									if ( $field > value ) { print $0 }
 								}					
 								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								echo $num
 								checkdata "$num"
 								break
@@ -75,7 +75,7 @@ read tabel_name
 									if ( $field < value ) { print $0 }
 								}	
 								' "$path/MyDBMS/$dbname/$tabel_name" > temp
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
 								;;
@@ -85,7 +85,7 @@ read tabel_name
 									if ( $field >= value ) { print $0 }
 								}
 								' "$path/MyDBMS/$dbname/$tabel_name" > temp
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
 								;;
@@ -95,7 +95,7 @@ read tabel_name
 									if ( $field <= value ) { print $0 }
 								}
 								' "$path/MyDBMS/$dbname/$tabel_name" > temp
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
 								;;
@@ -106,7 +106,7 @@ read tabel_name
 									if ( $field == value ) { print $0 }
 								}
 								' "$path/MyDBMS/$dbname/$tabel_name" > temp
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
 								;;
