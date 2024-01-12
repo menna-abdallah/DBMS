@@ -22,7 +22,7 @@ function checkdata(){
 					echo -e "${YELLOW}------------------There is no data in the table yet!!!------------------${ENDCOLOR}"
 				else
 					echo -e "${BLUE}------------------Selected Data----------------------------${ENDCOLOR}"
-					cat "$path/MyDBMS/$dbname/$tabel_name"
+					cat "$path/MyDBMS/$dbname/temp"
 				fi
 }
 typeset -i count=1
@@ -42,7 +42,7 @@ read tabel_name
 		case $option in
 			"select all")
 				num=$(cat "$path/MyDBMS/$dbname/$tabel_name" | wc -l )
-				cat "$path/MyDBMS/$dbname/$tabel_name" > temp
+				cat "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 				checkdata "$num"
 				break
 				;;
@@ -65,7 +65,6 @@ read tabel_name
 								}					
 								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
-								echo $num
 								checkdata "$num"
 								break
 								;;
@@ -74,7 +73,7 @@ read tabel_name
 								{ 
 									if ( $field < value ) { print $0 }
 								}	
-								' "$path/MyDBMS/$dbname/$tabel_name" > temp
+								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
@@ -84,7 +83,7 @@ read tabel_name
 								{ 
 									if ( $field >= value ) { print $0 }
 								}
-								' "$path/MyDBMS/$dbname/$tabel_name" > temp
+								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
@@ -94,7 +93,7 @@ read tabel_name
 								{ 
 									if ( $field <= value ) { print $0 }
 								}
-								' "$path/MyDBMS/$dbname/$tabel_name" > temp
+								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
@@ -105,7 +104,7 @@ read tabel_name
 								{ 
 									if ( $field == value ) { print $0 }
 								}
-								' "$path/MyDBMS/$dbname/$tabel_name" > temp
+								' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
 								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 								break
@@ -124,8 +123,8 @@ read tabel_name
 			select opt in `cut -d":" -f1 "$path/MyDBMS/$dbname/$tabel_name.metadata"`
 				do
 					replay=$REPLY	
-				awk -F: -v field="$replay" '{ print $field }' "$path/MyDBMS/$dbname/$tabel_name" > temp
-								num=$(wc -l < "$path/MyDBMS/$dbname/temp" | awk '{print $1}')
+				awk -F: -v field="$replay" '{ print $field }' "$path/MyDBMS/$dbname/$tabel_name" > "$path/MyDBMS/$dbname/temp"
+								num=$(wc -l < "$path/MyDBMS/$dbname/$tabel_name" | awk '{print $1}')
 								checkdata "$num"
 				done
 				break;
